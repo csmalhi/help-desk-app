@@ -1,21 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, TouchableOpacity, View, Text } from 'react-native';
 import * as ImagePickerComponent from 'expo-image-picker';
 import { StyleSheet } from 'react-native';
 
 interface ImagePickerProps {
   onImageSelected?: (uri: string | null) => void;
+  shouldReset: boolean;
 }
 
-interface Asset {
-  uri: string;
-  width?: number;
-  height?: number;
-  fileSize?: number;
-  mediaType?: string;
-}
-const ImagePicker: React.FC<ImagePickerProps> = ({ onImageSelected }) => {
-  const [photoUri, setPhotoUri] = useState<string | null>(null);
+const ImagePicker: React.FC<ImagePickerProps> = ({ onImageSelected, shouldReset }) => {
+  const [photoUri, setPhotoUri] = useState<string>('');
 
   const pickImage = async () => {
     const { status } = await ImagePickerComponent.requestMediaLibraryPermissionsAsync();
@@ -39,6 +33,10 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ onImageSelected }) => {
       }
     }
   };
+
+  useEffect(() => {
+    setPhotoUri('');
+  }, [shouldReset]);
 
   return (
     <View>

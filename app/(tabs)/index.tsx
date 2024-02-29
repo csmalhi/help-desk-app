@@ -1,14 +1,19 @@
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
+import NewTicketForm from '@/components/NewTicketForm';
 import { Text, View } from '@/components/Themed';
+import { Ticket } from '@/models/ticket';
 
 export default function TabOneScreen() {
+  const submitTicket = (ticket: Ticket) => {
+    console.log('submitting', ticket)
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <NewTicketForm path="app/(tabs)/index.tsx" onSubmitForm={submitTicket} />
     </View>
   );
 }

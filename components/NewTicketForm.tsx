@@ -1,58 +1,53 @@
 import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
-import { FlatList, Image, TextInput, TouchableOpacity } from 'react-native';
+import { TextInput, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
+import { Ticket } from '@/models/ticket';
 import ImagePicker from '@/components/ImagePicker';
 
-type Status = 'new' | 'in progress' | 'resolved';
 
-interface Ticket {
-  id: number;
-  name: string;
-  email: string;
-  description: string;
-  photo?: string;
-  status: Status;
-}
-
-
-export default function TabTwoScreen() {
+export default function NewTicketForm({ path, onSubmitForm }: { path: string, onSubmitForm: (ticket: Ticket) => void }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [photo, setPhoto] = useState<string>(''); 
   const [description, setDescription] = useState('');
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [submitted, setSubmitted] = useState(false);
 
-  const submitTicket = () => {
-    const newTicket: Ticket = {
-      id: Date.now(),
+  const createTicket = (): Ticket => {
+    return {
       name,
       email,
       photo,
       description,
-      status: 'new',
+      status: 'new'
     };
-    setTickets([...tickets, newTicket]);
-    setName('');
-    setEmail('');
-    setPhoto('');
-    setDescription('');
-    console.log('Would normally send email here with body:', newTicket);
   };
 
   const handleImageSelection = (uri: string | null) => {
     if (uri) {
       setPhoto(uri);
+    } else {
+      console.warn('Image selection cancelled or failed');
     }
+  };
+
+  const submitTicket = () => {
+    const ticket = createTicket();
+
+    if (!name || !email || !description) {
+      console.warn('Please fill in all required fields');
+      return;
+    }
+    onSubmitForm(ticket)
+    setSubmitted(!submitted);    
+    setName('');
+    setEmail('');
+    setDescription('');
+    setPhoto('')
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create a new ticket</Text>
-      <Text></Text>
-      {/* <EditScreenInfo path="app/(tabs)/two.tsx" /> */}
       <TextInput
         value={name}
         onChangeText={setName}
@@ -72,25 +67,20 @@ export default function TabTwoScreen() {
         multiline
         style={styles.textarea}
       />
-      <ImagePicker onImageSelected={handleImageSelection} />
+      <ImagePicker shouldReset={submitted} onImageSelected={handleImageSelection} />
       <TouchableOpacity onPress={submitTicket} style={styles.button}>
         <Text style={{ color: '#fff' }}>Submit Ticket</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    padding: 20,
+    width: '100%'
   },
   input: {
     borderWidth: 1,
