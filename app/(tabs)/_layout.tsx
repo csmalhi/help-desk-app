@@ -1,7 +1,6 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Tabs } from 'expo-router';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
@@ -30,24 +29,11 @@ export default function TabLayout() {
         options={{
           title: 'New Ticket',
           tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+
         }}
       />
       <Tabs.Screen
-        name="tickets"
+        name="my-tickets"
         options={{
           title: 'My Tickets',
           tabBarIcon: ({ color }) => <TabBarIcon name="folder-open" color={color} />,
