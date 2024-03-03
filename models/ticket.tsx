@@ -2,7 +2,7 @@
 type Status = 'new' | 'in progress' | 'resolved';
 
 export interface Ticket {
-    id?: string;
+    id: string;
     name: string;
     email: string;
     description: string;

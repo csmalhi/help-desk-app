@@ -1,27 +1,26 @@
 import { Ticket } from '@/models/ticket';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { doc, getDoc } from "firebase/firestore";
+import {auth, db} from '../../firebase'
+import { Link, useLocalSearchParams } from "expo-router";
 
-interface TicketDetailsScreenParamList {
-  TicketDetails: { ticketId: string };
-}
-
-export default function TicketDetailsScreen({
-  route,
-}: { route: any }) {
-  // const { ticketId } = route?.params;
-
-  const [ticket, setTicket] = useState<Ticket | null>({
-    id: '1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    description: 'This is a sample ticket description for ticket 1.',
-    photo: 'https://via.placeholder.com/150',
-    status: 'new',
-  });
-
+export default function TicketDetailsScreen() {
+  const params = useLocalSearchParams();
+  const {id} = params;
+  const [ticket, setTicket] = useState<any | null>(null);
+  
+  const getTicket = async () => {
+    const ticketResponse = await getDoc(doc(db, `users/${auth.currentUser?.uid}/tickets/${id}`))
+    setTicket(ticketResponse.data())
+    console.log(auth.currentUser)
+  }
+  
+  useEffect(() => {
+    getTicket()
+  }, [])
+  
   if (!ticket) {
-    // Handle loading state or display an error message if fetching fails
     return (
       <View style={styles.container}>
         <Text>Loading ticket details...</Text>
@@ -31,6 +30,7 @@ export default function TicketDetailsScreen({
 
   return (
     <View style={styles.container}>
+      <Link href="/tickets/my-tickets">Back</Link>
       <Text style={styles.title}>Ticket Details</Text>
       <View style={styles.details}>
         <Text style={styles.detailLabel}>ID:</Text>
@@ -47,6 +47,10 @@ export default function TicketDetailsScreen({
       <View style={styles.details}>
         <Text style={styles.detailLabel}>Description:</Text>
         <Text style={styles.detailValue}>{ticket.description}</Text>
+      </View>
+      <View style={styles.details}>
+        <Text style={styles.detailLabel}>Status:</Text>
+        <Text style={styles.detailValue}>{ticket.status}</Text>
       </View>
       {ticket.photo && (
         <Image source={{ uri: ticket.photo }} style={styles.image} />

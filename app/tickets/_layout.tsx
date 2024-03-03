@@ -1,7 +1,6 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
-
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
@@ -29,7 +28,7 @@ export default function TabLayout() {
         options={{
           title: 'New Ticket',
           tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
-
+          
         }}
       />
       <Tabs.Screen
@@ -37,6 +36,12 @@ export default function TabLayout() {
         options={{
           title: 'My Tickets',
           tabBarIcon: ({ color }) => <TabBarIcon name="folder-open" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="[id]"
+        options={{
+          href: null
         }}
       />
     </Tabs>
