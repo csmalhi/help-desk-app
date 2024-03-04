@@ -21,7 +21,7 @@ const VerifyEmailComponent: React.FC<Props> = ({ navigation }) => {
         onPress={() => sendVerification()}
       ></Button>
       <Text>Please verify your email address.</Text>
-      <Link to={'/sign-n'}>Go to Sign In</Link>
+      <Link to={'/auth/sign-n'}>Go to Sign In</Link>
     </View>
   );
 }

@@ -1,12 +1,13 @@
+import React, { useEffect, useState } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Stack } from 'expo-router';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import React, { useEffect, useState } from 'react';
-import '../firebase';
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 import { useColorScheme } from '@/components/useColorScheme';
+import { doc, getDoc } from "firebase/firestore";
+import * as SplashScreen from 'expo-splash-screen';
+import '../firebase';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -14,8 +15,7 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(auth)',
+  initialRouteName: '(tickets)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -48,28 +48,37 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  const [isAdmin, setIsAdmin] = useState(false);
   const colorScheme = useColorScheme();
 
+  const getUserFromDb = async (userId: string) => {
+    const usersResponse = await getDoc(doc(db, `users/${userId}`))
+    const admin = usersResponse?.data()?.admin;
+    setIsAdmin(admin);
+  }
+
+  // display screens based on auth state
   useEffect(() => {
     const subscriber = auth.onAuthStateChanged((user: any) => {
-      if (user) setUser(user);
-      console.log(user)
-      // getResources(user.uid)
+      if (user) {
+        setUser(user);
+        getUserFromDb(user.uid)
+      }
       if (initializing) setInitializing(false);
     }, (error) => {
       console.log(error)
     });
+
     return subscriber;
   }, []);
 
+  // select between admin and non admin flow
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        {
-          user ?
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} /> :
-            <Stack.Screen name="tickets" options={{ headerShown: false }} />
-        }
+        isAdmin ?
+          <Stack.Screen name="(admin-tickets)" options={{ headerShown: false }} /> :
+          <Stack.Screen name="(tickets)" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

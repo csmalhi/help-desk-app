@@ -8,12 +8,13 @@ import { auth, db } from '../../firebase'
 import { signOut } from 'firebase/auth';
 
 export default function MyTicketsScreen() {
-  const [tickets, setTickets] = useState<any>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  // pull the list to refresh
   const [refreshing, setRefreshing] = useState(false);
 
   const navigate = (id: any) => {
     router.push({
-      pathname: `/tickets/${id}`,
+      pathname: `/(tickets)/${id}`,
       params: {
         id
       }
@@ -24,7 +25,7 @@ export default function MyTicketsScreen() {
     signOut(auth).then(() => {
       console.log("User signed out!")
       router.push({
-        pathname: `/sign-in`
+        pathname: `/auth/sign-in`
       })
     });
   }
@@ -34,8 +35,7 @@ export default function MyTicketsScreen() {
     const q = collection(db, `users/${userId}/tickets`)
     const querySnapshot = await getDocs(q)
     const ticketsResponse = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }))
-    setTickets(ticketsResponse);
-    console.log('got it', ticketsResponse, tickets)
+    setTickets(ticketsResponse as Ticket[]);
   }
 
   useEffect(() => {

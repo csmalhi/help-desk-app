@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Text, Button, View, TextInput, } from "react-native";
+import { StatusBar, StyleSheet, Text, TextInput, Button, View, } from "react-native";
 import { Link } from "@react-navigation/native";
-import {auth} from '../../firebase'
+import { auth, db } from '../../firebase'
 import UserService from "../../services/user.service";
+import { router } from "expo-router";
 
 type Props = {
   navigation: any;
 }
 
-const ForgotPasswordComponent: React.FC<Props> = ({ navigation }) => {
+const SignInComponent: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  const sendPasswordReset = () => {
-    UserService.forgotPassword(auth, email)
+  const signIn = (email: string, password: string) => {
+    UserService.signIn(auth, db, email, password, router)
   }
 
   return (
@@ -20,14 +22,22 @@ const ForgotPasswordComponent: React.FC<Props> = ({ navigation }) => {
       <TextInput
         value={email}
         onChangeText={setEmail}
-        placeholder="Name"
+        placeholder="Email"
         style={styles.input}
       />
-      <Button title={'Send Password Reset Email'}
-        onPress={() => sendPasswordReset()}
+      <TextInput
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Password"
+        secureTextEntry={true}
+        style={styles.input}
+      />
+      <Button title={'Sign In'}
+        onPress={() => signIn(email, password)}
       ></Button>
-      <Text>Please verify your email address.</Text>
-      <Link to={'/sign-in'}>Go to Sign In</Link>
+      <Link to={'/auth/forgot-password'}>Forgot Password?</Link>
+      <Text>Don't have an account?</Text>
+      <Link to={'/auth/sign-up'}>Go to Sign Up</Link>
     </View>
   );
 }
@@ -59,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPasswordComponent;
+export default SignInComponent;

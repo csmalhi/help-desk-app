@@ -1,20 +1,18 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Text, TextInput, Button, View, } from "react-native";
+import { StatusBar, Switch, StyleSheet, Text, TextInput, Button, View, } from "react-native";
+import {auth, db} from '../../firebase'
 import { Link } from "@react-navigation/native";
-import {auth} from '../../firebase'
 import UserService from "../../services/user.service";
 import { router } from "expo-router";
 
-type Props = {
-  navigation: any;
-}
-
-const SignInComponent: React.FC<Props> = ({navigation}) => {
+const SignUpComponent = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isAdmin, setisAdmin] = useState(false);
+  const toggleSwitch = () => setisAdmin(previousState => !previousState);
 
-  const signIn = (email: string, password: string) => {
-    UserService.signIn(auth, email, password, router)
+  const signUp = (email: string, password: string) => {
+    UserService.signUp(auth, db, router, email, password, isAdmin)
   }
 
   return (
@@ -22,21 +20,29 @@ const SignInComponent: React.FC<Props> = ({navigation}) => {
       <TextInput
         value={email}
         onChangeText={setEmail}
-        placeholder="Name"
+        placeholder="Email"
         style={styles.input}
       />
       <TextInput
         value={password}
         onChangeText={setPassword}
-        placeholder="Name"
+        placeholder="Password"
+        secureTextEntry={true}
         style={styles.input}
       />
-      <Button title={'Sign In'}
-        onPress={() => signIn(email, password)}
+      <Text>Admin</Text>
+      <Switch
+        trackColor={{false: '#767577', true: '#5080ff'}}
+        thumbColor={isAdmin ? '#e53d1b' : '#f4f3f4'}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isAdmin}
+      />
+      <Button title={'Sign Up'}
+        onPress={() => signUp(email, password)}
       ></Button>
-      <Link to={'/forgot-password'}>Forgot Password?</Link>
-      <Text>Don't have an account?</Text>
-      <Link to={'/sign-up'}>Go to Sign Up</Link>
+      <Text>Already have an account?</Text>
+      <Link to={'/auth/sign-in'}>Go to Sign In</Link>
     </View>
   );
 }
@@ -65,7 +71,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: '100%',
     borderRadius: 5
-  },
+  }
 });
 
-export default SignInComponent;
+export default SignUpComponent;

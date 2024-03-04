@@ -5,15 +5,14 @@ import { useState } from 'react';
 import { Ticket } from '@/models/ticket';
 import ImagePicker from '@/components/ImagePicker';
 
-
-export default function NewTicketForm({ path, onSubmitForm }: { path: string, onSubmitForm: (ticket: Ticket) => void }) {
+export default function NewTicketForm({ onSubmitForm }: { onSubmitForm: (ticket: Partial<Ticket>) => void }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [photo, setPhoto] = useState<string>(''); 
   const [description, setDescription] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const createTicket = (): Ticket => {
+  const createTicket = (): Partial<Ticket> => {
     return {
       name,
       email,
@@ -25,6 +24,7 @@ export default function NewTicketForm({ path, onSubmitForm }: { path: string, on
 
   const handleImageSelection = (uri: string | null) => {
     if (uri) {
+      // should push to firebase storage
       setPhoto(uri);
     } else {
       console.warn('Image selection cancelled or failed');

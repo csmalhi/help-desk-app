@@ -1,23 +1,29 @@
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { sendEmailVerification } from "firebase/auth";
 import { User } from "../models/user";
 
 const UserService = {
-  signIn: function (auth: any, email: string, password: string, router: any) {
+  signIn: function (auth: any, db: any, email: string, password: string, router: any) {
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then(async () => {
         console.log("User signed in!");
-        router.push('/tickets')
+        auth.currentUser.uid
+        const usersResponse = await getDoc(doc(db, `users/${auth?.currentUser?.uid}`))
+        const admin = usersResponse?.data()?.admin;
+        if (admin) {
+          router.push('/(admin-tickets)')
+        } {
+          router.push('/(tickets)')
+        }
       })
       .catch((error: any) => {
         if (error.code === "auth/invalid-email") {
           console.log("That email address is invalid!");
         }
-    
         console.error(error);
       });
   },
@@ -26,7 +32,11 @@ const UserService = {
       .then(() => {
         setUserData(db, auth.currentUser, admin)
         console.log("User account created & signed in!");
-        router.push('/tickets')
+        if (admin) {
+          router.push('/(admin-tickets)')
+        } else {
+          router.push('/(tickets)')
+        }
       })
       .catch((error: any) => {
         if (error.code === "auth/email-already-in-use") {
@@ -50,25 +60,13 @@ const UserService = {
   verifyEmail: function(auth: any, router: any) {
     if (auth.currentUser) {
       sendEmailVerification(auth.currentUser).then(() => {
-        router.push(['/verify-email-address']);
+        router.push(['/auth/verify-email-address']);
       });
     }
   }
 };
 
-export default UserService;
-
-
-const isLoggedIn = () => {
-  // const user = JSON.parse(AsyncStorage.getItem('user')!);
-  // return user !== null && user.emailVerified !== false ? true : false;
-}
-
-const userSignOut = () => {
-  // signOut(auth).then(() => console.log("User signed ou!"));
-}
-
-const setUserData = async (db: any, user: any, admin: boolean) => {
+const setUserData = async (db: any, user: any, admin: boolean = false) => {
   const userData: User = {
     uid: user.uid,
     email: user.email,
@@ -79,3 +77,5 @@ const setUserData = async (db: any, user: any, admin: boolean) => {
   };
   const collection = await setDoc(doc(db, `users/${user.uid}`), userData).then(() => { console.log('Success adding resource')}).catch(error => console.log('error adding resource: ', error))
 }
+
+export default UserService;

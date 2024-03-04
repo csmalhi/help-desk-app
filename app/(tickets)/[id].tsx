@@ -1,19 +1,19 @@
-import { Ticket } from '@/models/ticket';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { doc, getDoc } from "firebase/firestore";
-import {auth, db} from '../../firebase'
 import { Link, useLocalSearchParams } from "expo-router";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from '../../firebase'
+import { Ticket } from '@/models/ticket';
 
 export default function TicketDetailsScreen() {
   const params = useLocalSearchParams();
   const {id} = params;
-  const [ticket, setTicket] = useState<any | null>(null);
+  const [ticket, setTicket] = useState<Ticket | null>(null);
   
+  // get the ticket from firebase on init using ticket id from params
   const getTicket = async () => {
     const ticketResponse = await getDoc(doc(db, `users/${auth.currentUser?.uid}/tickets/${id}`))
-    setTicket(ticketResponse.data())
-    console.log(auth.currentUser)
+    setTicket(ticketResponse.data() as Ticket)
   }
   
   useEffect(() => {
@@ -30,12 +30,8 @@ export default function TicketDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      <Link href="/tickets/my-tickets">Back</Link>
+      <Link href="/(tickets)/my-tickets">Back</Link>
       <Text style={styles.title}>Ticket Details</Text>
-      <View style={styles.details}>
-        <Text style={styles.detailLabel}>ID:</Text>
-        <Text style={styles.detailValue}>{ticket.id}</Text>
-      </View>
       <View style={styles.details}>
         <Text style={styles.detailLabel}>Name:</Text>
         <Text style={styles.detailValue}>{ticket.name}</Text>
