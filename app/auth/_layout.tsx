@@ -5,7 +5,6 @@ export const unstable_settings = {
   initialRouteName: '/auth/sign-in',
 };
 
-
 const AuthStack = () => {
   return (
     <Stack>

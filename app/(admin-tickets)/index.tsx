@@ -89,14 +89,5 @@ const styles = StyleSheet.create({
   },
   ticketItem: {
     padding: 15,
-  },
-  ticketTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  ticketDescription: {
-    fontSize: 14,
-    color: '#888',
-    marginTop: 5,
-  },
+  }
 });

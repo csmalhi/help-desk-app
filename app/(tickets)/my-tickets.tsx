@@ -47,6 +47,7 @@ export default function MyTicketsScreen() {
       <View style={styles.ticketItem}>
         <Text>{item.name}</Text>
         <Text>{item.description}</Text>
+        <Text>{item.status}</Text>
       </View>
     </TouchableOpacity>
   );

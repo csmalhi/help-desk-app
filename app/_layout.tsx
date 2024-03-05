@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Stack } from 'expo-router';
+import { Redirect, Stack, router } from 'expo-router';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { auth, db } from '../firebase'
@@ -41,7 +41,6 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-
   return <RootLayoutNav />;
 }
 
@@ -63,12 +62,13 @@ function RootLayoutNav() {
       if (user) {
         setUser(user);
         getUserFromDb(user.uid)
+      } else {
+        return router.replace('/auth/sign-in')
       }
       if (initializing) setInitializing(false);
     }, (error) => {
       console.log(error)
     });
-
     return subscriber;
   }, []);
 

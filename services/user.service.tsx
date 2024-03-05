@@ -15,9 +15,9 @@ const UserService = {
         const usersResponse = await getDoc(doc(db, `users/${auth?.currentUser?.uid}`))
         const admin = usersResponse?.data()?.admin;
         if (admin) {
-          router.push('/(admin-tickets)')
-        } {
-          router.push('/(tickets)')
+          router.replace('/(admin-tickets)')
+        } else {
+          router.replace('/(tickets)')
         }
       })
       .catch((error: any) => {
@@ -33,9 +33,9 @@ const UserService = {
         setUserData(db, auth.currentUser, admin)
         console.log("User account created & signed in!");
         if (admin) {
-          router.push('/(admin-tickets)')
+          router.replace('/(admin-tickets)')
         } else {
-          router.push('/(tickets)')
+          router.replace('/(tickets)')
         }
       })
       .catch((error: any) => {
