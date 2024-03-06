@@ -23,4 +23,7 @@
 - View and update the status of tickets
 - Log back into non admin user and view updated status in non admin user
 
-**Note:** This was developed using the iPhone 15 pro max simulator (resolution)
+**Note:** 
+This was developed using the iPhone 15 pro max simulator (resolution)
+
+Ignore the header navigation if using android! 
