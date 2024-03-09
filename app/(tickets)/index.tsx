@@ -11,9 +11,19 @@ export default function NewTicketScreen() {
   const [visible, setVisible] = useState(false);
 
   const submitTicket = async (ticket: Partial<Ticket>) => {
-    const doc = await addDoc(collection(db, `users/${auth.currentUser?.uid}/tickets`), ticket)
-      .then((newTicket) => {
-        setVisible(true)
+    const newTicket = { 
+      ... ticket,
+      email: auth?.currentUser?.email,
+      userId: auth?.currentUser?.uid
+    }
+      const newTicketDoc = await addDoc(collection(db, `users/${auth.currentUser?.uid}/tickets`), newTicket)
+      .then(async (addedTicket) => {
+        const aggregateTicket = await addDoc(collection(db, 'all-tickets'), {id: addedTicket.id,...newTicket})
+         .then(() => {
+          console.log('successfully aggregated ticket')
+         })
+         .catch(error => Alert.alert('error aggregating ticket: ', error))
+         setVisible(true)
         console.log('successfully submitted ticket')
       })
       .catch(error => Alert.alert('error submitting ticket: ', error))

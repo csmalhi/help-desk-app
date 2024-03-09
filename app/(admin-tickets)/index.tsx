@@ -23,16 +23,11 @@ export default function AdminTicketsScreen() {
   }
 
   const getTickets = async () => {
-    const users = query(collectionGroup(db, 'users'));
-    const userSnapshot = await getDocs(users);
-    let ticketsResponse: any = []
-    userSnapshot.forEach(async (user) => {
-      const id = user.data().uid
-      const q = collection(db, `users/${id}/tickets`)
-      const querySnapshot = await getDocs(q)
-      ticketsResponse.push(...querySnapshot.docs.map((d) => ({ id: d.id, userId: id, ...d.data() })))
-      setTickets(ticketsResponse)
-    });
+    const ticketsResponse = [];
+    const q = collection(db, `all-tickets`)
+    const querySnapshot = await getDocs(q)
+    ticketsResponse.push(...querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() })))
+    setTickets(ticketsResponse)
   }
 
   useEffect(() => {

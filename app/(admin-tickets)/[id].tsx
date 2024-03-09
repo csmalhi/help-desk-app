@@ -7,7 +7,7 @@ import { db } from '../../firebase'
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { Ticket } from '@/models/ticket';
 import TicketDetails from '@/components/TicketDetails';
-import { Button, TextInput, Text } from 'react-native-paper';
+import { Button, TextInput, Text, Banner } from 'react-native-paper';
 
 export default function TicketDetailsScreen() {
   const [ticket, setTicket] = useState<Ticket | null>(null);
@@ -16,6 +16,7 @@ export default function TicketDetailsScreen() {
   const [body, setBody] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const params = useLocalSearchParams();
+  const [visible, setVisible] = useState(false);
   const { id, userId } = params;
 
   const getTicket = async () => {
@@ -30,16 +31,16 @@ export default function TicketDetailsScreen() {
   if (!ticket) {
     return (
       <View style={styles.container}>
-        <Link href="/(admin-tickets)/">Back</Link>
         <Text>Loading ticket id: {id}</Text>
       </View>
     );
   }
 
   const data = [{ value: 'new' }, { value: 'in progress' }, { value: 'resolved' }];
-
-  const onSendEmail = () => {
-    Alert.alert(`Would normally send email here with body: Subject: ${subject} ... Body: ${body}`)
+    
+  const onSendEmail = async () => {
+    setVisible(true)
+    console.log(`Would normally send email here with body: Subject: ${subject} * Body: ${body} * Email: ${ticket.email}`)
   }
 
   const onUpdateStatus = async () => {
@@ -54,7 +55,7 @@ export default function TicketDetailsScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <TicketDetails ticket={ticket} isAdmin={true}/>
+      <TicketDetails ticket={ticket} isAdmin={true} />
       <View style={styles.actions}>
         <Text variant="titleMedium">Update Status</Text>
         <Dropdown
@@ -101,6 +102,17 @@ export default function TicketDetailsScreen() {
           Send Email
         </Button>
       </View>
+      <Banner
+        visible={visible}
+        actions={[
+          {
+            label: 'Ok',
+            onPress: () => setVisible(false),
+          },
+        ]}
+      >
+        Would normally send email here with body: Subject: {subject} * Body: {body} * Email: {ticket.email}
+      </Banner>
     </ScrollView>
   );
 }
@@ -148,7 +160,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   actions: {
-    marginBottom: 500,
+    marginBottom: 60,
     marginTop: 20
   }
 });
