@@ -9,8 +9,8 @@ import { Button, TextInput, Text, Switch } from "react-native-paper";
 const SignUpComponent = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isAdmin, setisAdmin] = useState(false);
-  const toggleSwitch = () => setisAdmin(previousState => !previousState);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const toggleSwitch = () => setIsAdmin(previousState => !previousState);
 
   const signUp = () => {
     UserService.signUp(auth, db, router, email, password, isAdmin)

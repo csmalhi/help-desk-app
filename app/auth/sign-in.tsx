@@ -40,7 +40,7 @@ const SignInComponent: React.FC<Props> = ({navigation}) => {
       </Button>
       <Link to={'/auth/forgot-password'} style={styles.link}>Forgot Password?</Link>
       <Text variant="labelMedium">Don't have an account?</Text>
-      <Link to={'/auth/sign-up'}style={styles.link}>Go to Sign Up</Link>
+      <Link to={'/auth/sign-up'} style={styles.link}>Go to Sign Up</Link>
     </View>
   );
 }

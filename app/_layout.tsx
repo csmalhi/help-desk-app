@@ -64,7 +64,7 @@ function RootLayoutNav() {
         setUser(user);
         getUserFromDb(user.uid)
       } else {
-        return router.replace('/auth/sign-in')
+        router.replace('/auth/sign-in')
       }
       if (initializing) setInitializing(false);
     }, (error) => {
@@ -78,10 +78,9 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <PaperProvider>
         <Stack>
-          {isAdmin ?
-            <Stack.Screen name="(admin-tickets)" options={{ headerShown: false }} /> :
-            <Stack.Screen name="(tickets)" options={{ headerShown: false }} />}
-          <Stack.Screen name="auth" options={{ headerShown: false }}></Stack.Screen>
+          <Stack.Screen name="(admin-tickets)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tickets)" options={{ headerShown: false }} />
+          <Stack.Screen name="auth" options={{ headerShown: false }} />
         </Stack>
       </PaperProvider>
     </ThemeProvider>

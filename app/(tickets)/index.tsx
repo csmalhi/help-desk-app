@@ -2,7 +2,7 @@ import NewTicketForm from '@/components/NewTicketForm';
 import { Alert, StyleSheet } from 'react-native';
 import { View } from '@/components/Themed';
 import { Ticket } from '@/models/ticket';
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { db, auth } from '../../firebase'
 import { Banner } from 'react-native-paper';
 import { useState } from 'react';
@@ -18,7 +18,8 @@ export default function NewTicketScreen() {
     }
       const newTicketDoc = await addDoc(collection(db, `users/${auth.currentUser?.uid}/tickets`), newTicket)
       .then(async (addedTicket) => {
-        const aggregateTicket = await addDoc(collection(db, 'all-tickets'), {id: addedTicket.id,...newTicket})
+        const docReference = await doc(db, `all-tickets/${addedTicket.id}`) 
+        const aggregateTicket = await setDoc(docReference, {id: addedTicket.id,...newTicket})
          .then(() => {
           console.log('successfully aggregated ticket')
          })
@@ -51,6 +52,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    paddingTop: 80
+    paddingTop: 20
   }
 });

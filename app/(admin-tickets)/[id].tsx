@@ -1,7 +1,7 @@
 
-import { Link, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { db } from '../../firebase'
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -46,6 +46,7 @@ export default function TicketDetailsScreen() {
   const onUpdateStatus = async () => {
     let updatedTicket = { ...ticket, status: value }
     const document = await setDoc(doc(db, `users/${userId}/tickets/${id}`), updatedTicket)
+    const aggregateItemDocument = await setDoc(doc(db, `all-tickets/${id}`), updatedTicket)
       .then(() => {
         console.log('Success updating resource')
         getTicket()
@@ -98,7 +99,7 @@ export default function TicketDetailsScreen() {
           multiline
           style={styles.textarea}
         />
-        <Button mode="contained" onPress={onSendEmail} style={styles.button}>
+        <Button mode="contained" onPress={onSendEmail} style={[styles.button, styles.marginBottom]}>
           Send Email
         </Button>
       </View>
@@ -162,5 +163,8 @@ const styles = StyleSheet.create({
   actions: {
     marginBottom: 60,
     marginTop: 20
+  },
+  marginBottom: {
+    marginBottom: 500
   }
 });
