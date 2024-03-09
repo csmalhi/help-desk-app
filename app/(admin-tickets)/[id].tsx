@@ -1,12 +1,13 @@
 
 import { Link, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { View, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { db } from '../../firebase'
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { Ticket } from '@/models/ticket';
 import TicketDetails from '@/components/TicketDetails';
+import { Button, TextInput, Text } from 'react-native-paper';
 
 export default function TicketDetailsScreen() {
   const [ticket, setTicket] = useState<Ticket | null>(null);
@@ -55,9 +56,9 @@ export default function TicketDetailsScreen() {
     <ScrollView style={styles.container}>
       <TicketDetails ticket={ticket} isAdmin={true}/>
       <View style={styles.actions}>
-        <Text style={styles.dropdownLabel}>Update Status</Text>
+        <Text variant="titleMedium">Update Status</Text>
         <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+          style={[styles.dropdown, isFocus && { borderWidth: 2, borderColor: '#8f70cf' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -77,26 +78,28 @@ export default function TicketDetailsScreen() {
             setIsFocus(false);
           }}
         />
-        <TouchableOpacity onPress={onUpdateStatus} style={styles.button}>
-          <Text style={styles.buttonText}>Update Status</Text>
-        </TouchableOpacity>
-        <Text style={styles.dropdownLabel}>Send Email</Text>
+        <Button mode="contained" onPress={onUpdateStatus} style={styles.button}>
+          Update Status
+        </Button>
+        <Text variant="titleMedium">Send Email</Text>
         <TextInput
+          label="Subject"
+          mode="outlined"
           value={subject}
           onChangeText={setSubject}
-          placeholder="Subject"
           style={styles.input}
         />
         <TextInput
+          label="Body"
+          mode="outlined"
           value={body}
           onChangeText={setBody}
-          placeholder="Description"
           multiline
           style={styles.textarea}
         />
-        <TouchableOpacity onPress={onSendEmail} style={styles.button}>
-          <Text style={styles.buttonText}>Send Email</Text>
-        </TouchableOpacity>
+        <Button mode="contained" onPress={onSendEmail} style={styles.button}>
+          Send Email
+        </Button>
       </View>
     </ScrollView>
   );
@@ -108,48 +111,30 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   button: {
-    backgroundColor: '#2af',
-    padding: 20,
-    borderRadius: 5,
     marginTop: 20,
     marginBottom: 40
   },
   input: {
-    borderWidth: 1,
-    padding: 10,
     marginVertical: 10,
-    width: '100%',
-    borderRadius: 5
   },
   textarea: {
-    borderWidth: 1,
-    padding: 10,
-    minHeight: 100,
     marginVertical: 10,
-    width: '100%',
-    borderRadius: 5
-  },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center'
   },
   dropdown: {
     height: 50,
-    borderColor: 'gray',
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    marginTop: 10
-  },
-  dropdownLabel: {
-    marginBottom: 10,
-    fontWeight: 'bold'
+    borderColor: '#666',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 15,
+    marginTop: 10,
+    backgroundColor: 'white'
   },
   icon: {
     marginRight: 5,
   },
   placeholderStyle: {
     fontSize: 16,
+    color: '#666'
   },
   selectedTextStyle: {
     fontSize: 16,
@@ -163,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   actions: {
-    marginBottom: 20,
+    marginBottom: 500,
     marginTop: 20
   }
 });

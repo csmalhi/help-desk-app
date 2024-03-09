@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
-import { TextInput, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { Ticket } from '@/models/ticket';
 import ImagePicker from '@/components/ImagePicker';
+import { TextInput, Button } from 'react-native-paper';
 
 export default function NewTicketForm({ onSubmitForm }: { onSubmitForm: (ticket: Partial<Ticket>) => void }) {
   const [name, setName] = useState('');
@@ -48,29 +48,31 @@ export default function NewTicketForm({ onSubmitForm }: { onSubmitForm: (ticket:
 
   return (
     <View style={styles.container}>
+    <TextInput
+      label="Name"
+      value={name}
+      mode="outlined"
+      onChangeText={setName}
+      style={styles.input}
+    />
       <TextInput
-        value={name}
-        onChangeText={setName}
-        placeholder="Name"
-        style={styles.input}
+      label="Email"
+      value={email}
+      mode="outlined"
+      onChangeText={setEmail}
       />
       <TextInput
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Email"
-        style={styles.input}
-      />
-      <TextInput
+        label="Description"
         value={description}
         onChangeText={setDescription}
-        placeholder="Description"
+        mode="outlined"
         multiline
         style={styles.textarea}
       />
       <ImagePicker shouldReset={submitted} onImageSelected={handleImageSelection} />
-      <TouchableOpacity onPress={submitTicket} style={styles.button}>
+      <Button mode="contained" onPress={submitTicket} style={styles.button}>
         <Text style={{ color: '#fff' }}>Submit Ticket</Text>
-      </TouchableOpacity>
+      </Button>
     </View>
   );
 }
@@ -79,25 +81,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    borderWidth: 1,
-    padding: 10,
     marginVertical: 10,
-    width: '100%',
-    borderRadius: 5
   },
   textarea: { 
-    borderWidth: 1,
-    padding: 10,
-    minHeight: 100,
     marginVertical: 10,
     width: '100%',
-    borderRadius: 5
   },
   button: {
-    backgroundColor: '#007bff',
-    padding: 20,
-    alignItems: 'center',
-    borderRadius: 5,
     marginTop: 80
   },
 });

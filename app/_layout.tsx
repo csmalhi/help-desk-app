@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import { auth, db } from '../firebase'
 import { useColorScheme } from '@/components/useColorScheme';
 import { doc, getDoc } from "firebase/firestore";
+import { PaperProvider } from 'react-native-paper';
 import * as SplashScreen from 'expo-splash-screen';
 import '../firebase';
 
@@ -58,9 +59,6 @@ function RootLayoutNav() {
 
   // display screens based on auth state
   useEffect(() => {
-    if (user) {
-      return router.replace('/auth/sign-in')
-    }
     const subscriber = auth.onAuthStateChanged((user: any) => {
       if (user) {
         setUser(user);
@@ -78,12 +76,14 @@ function RootLayoutNav() {
   // select between admin and non admin flow
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        {isAdmin ?
-          <Stack.Screen name="(admin-tickets)" options={{ headerShown: false }} /> :
-          <Stack.Screen name="(tickets)" options={{ headerShown: false }} />}
-        <Stack.Screen name="auth" options={{ headerShown: false }}></Stack.Screen>
-      </Stack>
+      <PaperProvider>
+        <Stack>
+          {isAdmin ?
+            <Stack.Screen name="(admin-tickets)" options={{ headerShown: false }} /> :
+            <Stack.Screen name="(tickets)" options={{ headerShown: false }} />}
+          <Stack.Screen name="auth" options={{ headerShown: false }}></Stack.Screen>
+        </Stack>
+      </PaperProvider>
     </ThemeProvider>
   );
 }

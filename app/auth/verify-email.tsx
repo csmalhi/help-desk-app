@@ -16,7 +16,7 @@ const VerifyEmailComponent: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={[styles.container]}>
       <Button title={'Send Verification Email'}
-        onPress={() => sendVerification()}
+        onPress={sendVerification}
       ></Button>
       <Text>Please verify your email address.</Text>
       <Link to={'/auth/sign-n'}>Go to Sign In</Link>

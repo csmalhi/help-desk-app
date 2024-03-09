@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, View, Text } from 'react-native';
+import { Image, View } from 'react-native';
 import * as ImagePickerComponent from 'expo-image-picker';
 import { StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 
 interface ImagePickerProps {
   onImageSelected?: (uri: string | null) => void;
@@ -40,9 +41,9 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ onImageSelected, shouldReset 
 
   return (
     <View>
-      <TouchableOpacity onPress={pickImage} style={styles.button}>
-        <Text>Attach Photo</Text>
-      </TouchableOpacity>
+      <Button mode="contained-tonal" onPress={pickImage} style={styles.button}>
+        Attach Photo
+      </Button>
       {photoUri && <Image source={{ uri: photoUri }} style={styles.image} />}
     </View>
   );
@@ -52,15 +53,13 @@ export default ImagePicker;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#ccc',
-    padding: 20,
-    borderRadius: 5,
     marginTop: 20
   },
   image: {
-    width: 50,
-    height: 50,
-    marginVertical: 10,
+    width: 80,
+    height: 80,
+    alignSelf: 'center',
+    marginVertical: 20,
     borderRadius: 5
   }
 });

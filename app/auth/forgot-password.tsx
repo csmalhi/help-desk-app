@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Text, Button, View, TextInput, } from "react-native";
+import { StyleSheet, Text, View, } from "react-native";
 import { Link } from "@react-navigation/native";
 import {auth} from '../../firebase'
 import UserService from "../../services/user.service";
+import { Button, TextInput } from "react-native-paper";
 
 type Props = {
   navigation: any;
@@ -17,16 +18,17 @@ const ForgotPasswordComponent: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={[styles.container]}>
+      <Text>Please verify your email address</Text>
       <TextInput
+        mode="outlined"
         value={email}
         onChangeText={setEmail}
-        placeholder="Email"
+        label="Email"
         style={styles.input}
       />
-      <Button title={'Send Password Reset Email'}
-        onPress={() => sendPasswordReset()}
-      ></Button>
-      <Text>Please verify your email address.</Text>
+      <Button mode="contained" onPress={sendPasswordReset} style={styles.button}>
+        Send Password Reset Email
+      </Button>
       <Link to={'/auth/sign-in'}>Go to Sign In</Link>
     </View>
   );
@@ -35,15 +37,14 @@ const ForgotPasswordComponent: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    paddingTop: 80,
+    paddingTop: 80
   },
   input: {
-    borderWidth: 1,
-    padding: 10,
     marginVertical: 10,
-    width: '100%',
-    borderRadius: 5
   },
+  button: {
+    marginVertical: 40
+  }
 });
 
 export default ForgotPasswordComponent;

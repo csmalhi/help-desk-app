@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Text, TextInput, Button, View, } from "react-native";
+import { StyleSheet, View, } from "react-native";
 import { Link } from "@react-navigation/native";
 import { auth, db } from '../../firebase'
 import UserService from "../../services/user.service";
 import { router } from "expo-router";
+import { Button, TextInput, Text } from "react-native-paper";
 
 type Props = {
   navigation: any;
@@ -13,31 +14,33 @@ const SignInComponent: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const signIn = (email: string, password: string) => {
+  const signIn = () => {
     UserService.signIn(auth, db, email, password, router)
   }
 
   return (
-    <View style={[styles.container]}>
+    <View style={styles.container}>
       <TextInput
+        mode="outlined"
         value={email}
         onChangeText={setEmail}
-        placeholder="Email"
+        label="Email"
         style={styles.input}
       />
       <TextInput
+        mode="outlined"
         value={password}
         onChangeText={setPassword}
-        placeholder="Password"
+        label="Password"
         secureTextEntry={true}
         style={styles.input}
       />
-      <Button title={'Sign In'}
-        onPress={() => signIn(email, password)}
-      ></Button>
-      <Link to={'/auth/forgot-password'}>Forgot Password?</Link>
-      <Text>Don't have an account?</Text>
-      <Link to={'/auth/sign-up'}>Go to Sign Up</Link>
+      <Button mode="contained" onPress={signIn} style={styles.button}>
+        Sign in
+      </Button>
+      <Link to={'/auth/forgot-password'} style={styles.link}>Forgot Password?</Link>
+      <Text variant="labelMedium">Don't have an account?</Text>
+      <Link to={'/auth/sign-up'}style={styles.link}>Go to Sign Up</Link>
     </View>
   );
 }
@@ -45,16 +48,18 @@ const SignInComponent: React.FC<Props> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flex: 2,
     paddingTop: 80
   },
   input: {
-    borderWidth: 1,
-    padding: 10,
     marginVertical: 10,
-    width: '100%',
-    borderRadius: 5
   },
+  button: {
+    marginVertical: 40
+  },
+  link: {
+    textDecorationLine: 'underline',
+    marginBottom: 20
+  }
 });
 
 export default SignInComponent;

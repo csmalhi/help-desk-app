@@ -4,14 +4,17 @@ import { View } from '@/components/Themed';
 import { Ticket } from '@/models/ticket';
 import { addDoc, collection } from "firebase/firestore";
 import { db, auth } from '../../firebase'
-import { router } from 'expo-router';
+import { Banner } from 'react-native-paper';
+import { useState } from 'react';
 
 export default function NewTicketScreen() {
+  const [visible, setVisible] = useState(false);
+
   const submitTicket = async (ticket: Partial<Ticket>) => {
     const doc = await addDoc(collection(db, `users/${auth.currentUser?.uid}/tickets`), ticket)
-      .then((newTicket) => { 
-        Alert.alert('Success submitting ticket')
-        router.replace(`/(tickets)/${newTicket.id}`)
+      .then((newTicket) => {
+        setVisible(true)
+        console.log('successfully submitted ticket')
       })
       .catch(error => Alert.alert('error submitting ticket: ', error))
   }
@@ -19,6 +22,17 @@ export default function NewTicketScreen() {
   return (
     <View style={styles.container}>
       <NewTicketForm onSubmitForm={submitTicket} />
+      <Banner
+      visible={visible}
+      actions={[
+        {
+          label: 'Ok',
+          onPress: () => setVisible(false),
+        },
+      ]}
+    >
+      Successfully submitted ticket
+    </Banner>
     </View>
   );
 }
@@ -28,9 +42,5 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 80
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
   }
 });

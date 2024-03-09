@@ -1,5 +1,6 @@
 import { Ticket } from '@/models/ticket';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 
 export default function TicketDetails({ ticket, isAdmin }: { ticket: Ticket, isAdmin: boolean }) {
   return (
@@ -7,22 +8,22 @@ export default function TicketDetails({ ticket, isAdmin }: { ticket: Ticket, isA
       {isAdmin && (
         <View>
           <View style={styles.details}>
-            <Text style={styles.detailLabel}>Name:</Text>
-            <Text style={styles.detailValue}>{ticket.name}</Text>
+            <Text variant="titleMedium">Name: </Text>
+            <Text variant="bodyMedium">{ticket.name}</Text>
           </View>
           <View style={styles.details}>
-            <Text style={styles.detailLabel}>Email:</Text>
-            <Text style={styles.detailValue}>{ticket.email}</Text>
+            <Text variant="titleMedium">Email: </Text>
+            <Text variant="bodyMedium">{ticket.email}</Text>
           </View>
         </View>
       )}
       <View style={styles.details}>
-        <Text style={styles.detailLabel}>Description:</Text>
-        <Text style={styles.detailValue}>{ticket.description}</Text>
+        <Text variant="titleMedium">Status: </Text>
+        <Text variant="bodyMedium">{ticket.status}</Text>
       </View>
       <View style={styles.details}>
-        <Text style={styles.detailLabel}>Status:</Text>
-        <Text style={styles.detailValue}>{ticket.status}</Text>
+        <Text variant="titleMedium" style={styles.title}>Description: </Text>
+        <Text variant="bodyMedium">{ticket.description}</Text>
       </View>
       {ticket.photo && (
         <Image source={{ uri: ticket.photo }} style={styles.image} />
@@ -37,14 +38,9 @@ const styles = StyleSheet.create({
   },
   details: {
     flexDirection: 'row',
+    alignItems: 'baseline',
     marginBottom: 5,
-  },
-  detailLabel: {
-    fontWeight: 'bold',
-    width: 100,
-  },
-  detailValue: {
-    flex: 1,
+    flexWrap: 'wrap'
   },
   image: {
     width: '100%',
@@ -53,4 +49,7 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     borderRadius: 5
   },
+  title: {
+    alignSelf: 'flex-start'
+  }
 });

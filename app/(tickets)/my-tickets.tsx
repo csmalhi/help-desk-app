@@ -1,10 +1,11 @@
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, View } from '@/components/Themed';
+import { FlatList, RefreshControl, StyleSheet, TouchableOpacity } from 'react-native';
+import { View } from '@/components/Themed';
 import { useEffect, useState } from 'react';
 import { Ticket } from '@/models/ticket';
 import { router } from 'expo-router';
 import { getDocs, collection } from "firebase/firestore";
 import { auth, db } from '../../firebase'
+import { ActivityIndicator, Text } from 'react-native-paper';
 
 export default function MyTicketsScreen() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -34,10 +35,9 @@ export default function MyTicketsScreen() {
 
   const renderItem = ({ item }: { item: Ticket }) => (
     <TouchableOpacity onPress={() => { navigate(item.id) }}>
-      <View style={styles.ticketItem}>
-        <Text style={styles.ticketTitle}>{item.name}</Text>
-        <Text style={styles.ticketDescription}>{item.description}</Text>
-        <Text>{item.status}</Text>
+      <View style={styles.item}>
+        <Text variant="titleMedium">{item.description}</Text>
+        <Text variant="bodySmall">{item.status}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -61,8 +61,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    paddingBottom: 0
   },
-  ticketItem: {
+  item: {
     flex: 1,
     padding: 10,
     backgroundColor: "#e9e9e9",
@@ -70,13 +71,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 5
   },
-  ticketTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  ticketDescription: {
-    fontSize: 14,
-    color: '#555',
-    marginTop: 5,
-  }
 });
