@@ -18,7 +18,7 @@ const SignInComponent: React.FC<Props> = ({navigation}) => {
   }
 
   return (
-    <View style={[styles.media]}>
+    <View style={[styles.container]}>
       <TextInput
         value={email}
         onChangeText={setEmail}
@@ -43,22 +43,10 @@ const SignInComponent: React.FC<Props> = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    paddingTop: 10,
-  },
-  media: {
-    marginTop: StatusBar.currentHeight || 0,
-    padding: 5,
-    paddingTop: 40,
-    height: 600,
-    width: "100%",
-    backgroundColor: "#fff",
-  },
-  image: {
-    flex: 1,
-    width: undefined,
-    height: undefined,
-    resizeMode: "cover",
+  container: {
+    padding: 20,
+    flex: 2,
+    paddingTop: 80
   },
   input: {
     borderWidth: 1,

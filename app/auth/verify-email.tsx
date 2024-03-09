@@ -10,13 +10,11 @@ type Props = {
 
 const VerifyEmailComponent: React.FC<Props> = ({ navigation }) => {
   const sendVerification = () => {
-    // move user service import to router level
-    // TODO: if verified then enable sign in or create an auto sign in flow once verified
     UserService.verifyEmail(auth, navigation)
   }
 
   return (
-    <View style={[styles.media]}>
+    <View style={[styles.container]}>
       <Button title={'Send Verification Email'}
         onPress={() => sendVerification()}
       ></Button>
@@ -27,23 +25,14 @@ const VerifyEmailComponent: React.FC<Props> = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    paddingTop: 10,
-  },
-  media: {
+  container: {
     marginTop: StatusBar.currentHeight || 0,
     padding: 5,
     paddingTop: 40,
     height: 600,
     width: "100%",
     backgroundColor: "#fff",
-  },
-  image: {
-    flex: 1,
-    width: undefined,
-    height: undefined,
-    resizeMode: "cover",
-  },
+  }
 });
 
 export default VerifyEmailComponent;

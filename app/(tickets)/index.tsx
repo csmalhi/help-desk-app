@@ -1,22 +1,23 @@
 import NewTicketForm from '@/components/NewTicketForm';
-import { StyleSheet } from 'react-native';
-import { Text, View } from '@/components/Themed';
+import { Alert, StyleSheet } from 'react-native';
+import { View } from '@/components/Themed';
 import { Ticket } from '@/models/ticket';
 import { addDoc, collection } from "firebase/firestore";
 import { db, auth } from '../../firebase'
+import { router } from 'expo-router';
 
 export default function NewTicketScreen() {
-  // create a new ticket (firebase assigns id)
   const submitTicket = async (ticket: Partial<Ticket>) => {
     const doc = await addDoc(collection(db, `users/${auth.currentUser?.uid}/tickets`), ticket)
-      .then(() => { console.log('Success adding resource') })
-      .catch(error => console.log('error adding resource: ', error))
+      .then((newTicket) => { 
+        Alert.alert('Success submitting ticket')
+        router.replace(`/(tickets)/${newTicket.id}`)
+      })
+      .catch(error => Alert.alert('error submitting ticket: ', error))
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Submit a ticket to help desk</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <NewTicketForm onSubmitForm={submitTicket} />
     </View>
   );
@@ -25,16 +26,11 @@ export default function NewTicketScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 20,
+    paddingTop: 80
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+  }
 });

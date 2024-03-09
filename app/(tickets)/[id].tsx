@@ -8,7 +8,7 @@ import TicketDetails from '@/components/TicketDetails';
 
 export default function TicketDetailsScreen() {
   const params = useLocalSearchParams();
-  const {id} = params;
+  const { id } = params;
   const [ticket, setTicket] = useState<Ticket | null>(null);
   
   // get the ticket from firebase on init using ticket id from params
@@ -31,8 +31,7 @@ export default function TicketDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      <Link href="/(tickets)/my-tickets">Back</Link>
-      <TicketDetails ticket={ticket} />
+      <TicketDetails ticket={ticket} isAdmin={false}/>
     </View>
   );
 }

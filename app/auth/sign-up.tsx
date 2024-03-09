@@ -16,7 +16,7 @@ const SignUpComponent = () => {
   }
 
   return (
-    <View style={[styles.media]}>
+    <View style={[styles.container]}>
       <TextInput
         value={email}
         onChangeText={setEmail}
@@ -32,7 +32,7 @@ const SignUpComponent = () => {
       />
       <Text>Admin</Text>
       <Switch
-        trackColor={{false: '#767577', true: '#5080ff'}}
+        trackColor={{false: '#767577', true: '#30d02f'}}
         thumbColor={isAdmin ? '#e53d1b' : '#f4f3f4'}
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}
@@ -48,22 +48,9 @@ const SignUpComponent = () => {
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    paddingTop: 10,
-  },
-  media: {
-    marginTop: StatusBar.currentHeight || 0,
-    padding: 5,
-    paddingTop: 40,
-    height: 600,
-    width: "100%",
-    backgroundColor: "#fff",
-  },
-  image: {
-    flex: 1,
-    width: undefined,
-    height: undefined,
-    resizeMode: "cover",
+  container: {
+    padding: 20,
+    paddingTop: 80,
   },
   input: {
     borderWidth: 1,

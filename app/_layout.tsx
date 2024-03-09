@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Redirect, Stack, router } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { auth, db } from '../firebase'
@@ -58,6 +58,9 @@ function RootLayoutNav() {
 
   // display screens based on auth state
   useEffect(() => {
+    if (user) {
+      return router.replace('/auth/sign-in')
+    }
     const subscriber = auth.onAuthStateChanged((user: any) => {
       if (user) {
         setUser(user);
@@ -76,9 +79,10 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        isAdmin ?
+        {isAdmin ?
           <Stack.Screen name="(admin-tickets)" options={{ headerShown: false }} /> :
-          <Stack.Screen name="(tickets)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tickets)" options={{ headerShown: false }} />}
+        <Stack.Screen name="auth" options={{ headerShown: false }}></Stack.Screen>
       </Stack>
     </ThemeProvider>
   );

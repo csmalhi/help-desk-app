@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { Ticket } from '@/models/ticket';
 import { router } from 'expo-router';
 import { collection, collectionGroup, query, getDocs } from "firebase/firestore";
-import { auth, db } from '../../firebase'
-import { signOut } from 'firebase/auth';
+import { db } from '../../firebase'
 
 export default function AdminTicketsScreen() {
   const [tickets, setTickets] = useState<any>([]);
@@ -20,15 +19,6 @@ export default function AdminTicketsScreen() {
         userId
       }
     })
-  }
-
-  const logout = () => {
-    signOut(auth).then(() => {
-      console.log("User signed out!")
-      router.push({
-        pathname: `/auth/sign-in`
-      })
-    });
   }
 
   const getTickets = async () => {
@@ -51,8 +41,8 @@ export default function AdminTicketsScreen() {
   const renderItem = ({ item }: { item: Ticket }) => (
     <TouchableOpacity onPress={() => { navigate(item.id, item.userId ?? '') }}>
       <View style={styles.ticketItem}>
-        <Text>{item.name}</Text>
-        <Text>{item.description}</Text>
+        <Text style={styles.ticketTitle}>{item.name}</Text>
+        <Text style={styles.ticketDescription}>{item.description}</Text>
         <Text>{item.status}</Text>
       </View>
     </TouchableOpacity>
@@ -61,7 +51,6 @@ export default function AdminTicketsScreen() {
   return (
     <View style={styles.container}>
       {refreshing ? <ActivityIndicator /> : null}
-      <Text style={styles.title}>Admin Tickets</Text>
       <FlatList
         data={tickets}
         renderItem={renderItem}
@@ -70,9 +59,6 @@ export default function AdminTicketsScreen() {
         }
         keyExtractor={(item, index) => (item.id ? item.id.toString() : `item-${index}`)}
       />
-      <TouchableOpacity onPress={logout} >
-        <Text>Logout</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -82,12 +68,21 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
   ticketItem: {
-    padding: 15,
-  }
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#e9e9e9",
+    marginVertical: 5,
+    justifyContent: "center",
+    borderRadius: 5
+  },
+  ticketTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  ticketDescription: {
+    fontSize: 14,
+    color: '#555',
+    marginTop: 5,
+  },
 });

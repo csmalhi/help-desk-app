@@ -1,7 +1,7 @@
 
 import { Link, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { db } from '../../firebase'
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -11,6 +11,8 @@ import TicketDetails from '@/components/TicketDetails';
 export default function TicketDetailsScreen() {
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [value, setValue] = useState('');;
+  const [subject, setSubject] = useState('');
+  const [body, setBody] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const params = useLocalSearchParams();
   const { id, userId } = params;
@@ -36,7 +38,7 @@ export default function TicketDetailsScreen() {
   const data = [{ value: 'new' }, { value: 'in progress' }, { value: 'resolved' }];
 
   const onSendEmail = () => {
-    Alert.alert('Would normally send email here with body:')
+    Alert.alert(`Would normally send email here with body: Subject: ${subject} ... Body: ${body}`)
   }
 
   const onUpdateStatus = async () => {
@@ -51,9 +53,9 @@ export default function TicketDetailsScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Link href="/(admin-tickets)/">Back</Link>
-      <View>
-        <Text style={styles.detailLabel}>Update Status</Text>
+      <TicketDetails ticket={ticket} isAdmin={true}/>
+      <View style={styles.actions}>
+        <Text style={styles.dropdownLabel}>Update Status</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
           placeholderStyle={styles.placeholderStyle}
@@ -65,7 +67,7 @@ export default function TicketDetailsScreen() {
           maxHeight={300}
           labelField="value"
           valueField="value"
-          placeholder={!isFocus ? 'Select item' : '...'}
+          placeholder={!isFocus ? 'Select status' : '...'}
           searchPlaceholder="Search..."
           value={value}
           onFocus={() => setIsFocus(true)}
@@ -76,13 +78,26 @@ export default function TicketDetailsScreen() {
           }}
         />
         <TouchableOpacity onPress={onUpdateStatus} style={styles.button}>
-          <Text style={styles.detailLabel}>Update Status</Text>
+          <Text style={styles.buttonText}>Update Status</Text>
         </TouchableOpacity>
+        <Text style={styles.dropdownLabel}>Send Email</Text>
+        <TextInput
+          value={subject}
+          onChangeText={setSubject}
+          placeholder="Subject"
+          style={styles.input}
+        />
+        <TextInput
+          value={body}
+          onChangeText={setBody}
+          placeholder="Description"
+          multiline
+          style={styles.textarea}
+        />
         <TouchableOpacity onPress={onSendEmail} style={styles.button}>
-          <Text>Send Email</Text>
+          <Text style={styles.buttonText}>Send Email</Text>
         </TouchableOpacity>
       </View>
-      <TicketDetails ticket={ticket} />
     </ScrollView>
   );
 }
@@ -92,15 +107,31 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-  detailLabel: {
-    fontWeight: 'bold',
-    width: 100,
-  },
   button: {
-    backgroundColor: '#29f',
+    backgroundColor: '#2af',
     padding: 20,
     borderRadius: 5,
     marginTop: 20,
+    marginBottom: 40
+  },
+  input: {
+    borderWidth: 1,
+    padding: 10,
+    marginVertical: 10,
+    width: '100%',
+    borderRadius: 5
+  },
+  textarea: {
+    borderWidth: 1,
+    padding: 10,
+    minHeight: 100,
+    marginVertical: 10,
+    width: '100%',
+    borderRadius: 5
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center'
   },
   dropdown: {
     height: 50,
@@ -108,6 +139,11 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
+    marginTop: 10
+  },
+  dropdownLabel: {
+    marginBottom: 10,
+    fontWeight: 'bold'
   },
   icon: {
     marginRight: 5,
@@ -126,4 +162,8 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
+  actions: {
+    marginBottom: 20,
+    marginTop: 20
+  }
 });

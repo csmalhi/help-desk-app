@@ -77,10 +77,6 @@ export default function NewTicketForm({ onSubmitForm }: { onSubmitForm: (ticket:
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-    width: '100%'
   },
   input: {
     borderWidth: 1,
@@ -103,5 +99,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginTop: 80
-  }
+  },
 });

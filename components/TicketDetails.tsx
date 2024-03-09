@@ -1,18 +1,21 @@
 import { Ticket } from '@/models/ticket';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-export default function TicketDetails({ ticket }: { ticket: Ticket }) {
+export default function TicketDetails({ ticket, isAdmin }: { ticket: Ticket, isAdmin: boolean }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ticket Details</Text>
-      <View style={styles.details}>
-        <Text style={styles.detailLabel}>Name:</Text>
-        <Text style={styles.detailValue}>{ticket.name}</Text>
-      </View>
-      <View style={styles.details}>
-        <Text style={styles.detailLabel}>Email:</Text>
-        <Text style={styles.detailValue}>{ticket.email}</Text>
-      </View>
+      {isAdmin && (
+        <View>
+          <View style={styles.details}>
+            <Text style={styles.detailLabel}>Name:</Text>
+            <Text style={styles.detailValue}>{ticket.name}</Text>
+          </View>
+          <View style={styles.details}>
+            <Text style={styles.detailLabel}>Email:</Text>
+            <Text style={styles.detailValue}>{ticket.email}</Text>
+          </View>
+        </View>
+      )}
       <View style={styles.details}>
         <Text style={styles.detailLabel}>Description:</Text>
         <Text style={styles.detailValue}>{ticket.description}</Text>
@@ -31,12 +34,6 @@ export default function TicketDetails({ ticket }: { ticket: Ticket }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
   },
   details: {
     flexDirection: 'row',
@@ -54,5 +51,6 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     resizeMode: 'cover',
     marginVertical: 15,
+    borderRadius: 5
   },
 });
